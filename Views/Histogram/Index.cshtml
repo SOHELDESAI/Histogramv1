@@ -1,0 +1,67 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<YourNamespace.Models.DataPoint>
+
+<h2>Histogram</h2>
+
+<div>
+    <canvas id="myHistogram" width="600" height="400"></canvas>
+
+    <script>
+        var histogramData = @Html.Raw(Json.Serialize(Model));
+
+        function fetchHistogramData() {
+            $.get('/Histogram/RefreshData', function (data) {
+                console.log('Histogram Data received:', data);
+                var histogramChart = myHistogram;
+                histogramChart.data.labels = data.map(item => item.X);
+                histogramChart.data.datasets[0].data = data.map(item => item.Y);
+                histogramChart.update();
+            });
+        }
+
+        var histogramCtx = document.getElementById('myHistogram').getContext('2d');
+        var myHistogram = new Chart(histogramCtx, {
+            type: 'bar',
+            data: {
+                labels: histogramData.map(item => item.X),
+                datasets: [{
+                    label: 'Histogram',
+                    data: histogramData.map(item => item.Y),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    text: 'Histogram'
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Category'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Frequency'
+                        },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Periodically fetch new histogram data based on the configured time interval
+        setInterval(fetchHistogramData, 60 * 1000);
+    </script>
+</div>
