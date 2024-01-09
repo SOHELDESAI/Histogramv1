@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ChartJs" Version="23.1.7" />
     <PackageReference Include="XPlot.Plotly" Version="4.0.6" />
   </ItemGroup>
 

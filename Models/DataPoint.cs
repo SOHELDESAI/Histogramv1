@@ -1,8 +1,9 @@
-﻿namespace YourNamespace.Models
+﻿namespace Histogramv1.Models
 {
+    // Models/HistogramData.cs
     public class DataPoint
     {
-        public int X { get; set; }
-        public int Y { get; set; }
+        public List<int> Values { get; set; }
     }
+
 }
